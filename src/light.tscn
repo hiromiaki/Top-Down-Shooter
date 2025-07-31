@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/gameplay/tileset/Dungeon_Tileset.png" type="Texture" id=1]
+[ext_resource path="res://assets/light (1).png" type="Texture" id=2]
+
+[node name="light" type="Node2D"]
+
+[node name="Light2D" type="Light2D" parent="."]
+position = Vector2( 0, -5 )
+texture = ExtResource( 2 )
+texture_scale = 0.4
+color = Color( 0.976471, 0.705882, 0.188235, 1 )
+energy = 1.57
+shadow_enabled = true
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( -2.98023e-08, -3 )
+scale = Vector2( 2.40625, 2.92548 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 2.1268, 145.343, 12.3991, 13.8198 )

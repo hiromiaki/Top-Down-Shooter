@@ -1,0 +1,138 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/gameplay/tileset/Dungeon_Tileset.png" type="Texture" id=1]
+[ext_resource path="res://src/next_level.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 24.5, 24.5 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 28.625, 24.5 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 55.5, 27.5 )
+
+[sub_resource type="Animation" id=4]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("left-door:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -26, -16.375 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("right-door:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 26.8125, -16 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "door-open"
+tracks/0/type = "value"
+tracks/0/path = NodePath("left-door:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.1, 0.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -26, -16.375 ), Vector2( -74, -16.375 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("right-door:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.1, 0.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 26.8125, -16 ), Vector2( 85.8125, -16 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("left-door/left-collision:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.1, 0.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.0800629, -0.19841 ), Vector2( 0.0800629, -0.19841 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("right-door/right-collision:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.1, 0.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -0.0385551, -0.32 ), Vector2( -0.0385551, -0.32 ) ]
+}
+
+[node name="next_level" type="Area2D"]
+collision_layer = 8
+script = ExtResource( 2 )
+
+[node name="left-door" type="StaticBody2D" parent="."]
+position = Vector2( -26, -16.375 )
+scale = Vector2( 3.28571, 3.15 )
+collision_layer = 8
+collision_mask = 15
+
+[node name="Sprite" type="Sprite" parent="left-door"]
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 96.2184, 96.1005, 14.6504, 15.55 )
+
+[node name="left-collision" type="CollisionShape2D" parent="left-door"]
+position = Vector2( 0.0800629, -0.19841 )
+scale = Vector2( 0.304348, 0.31746 )
+shape = SubResource( 1 )
+
+[node name="right-door" type="StaticBody2D" parent="."]
+position = Vector2( 26.8125, -16 )
+scale = Vector2( 3.52344, 3.125 )
+
+[node name="Sprite" type="Sprite" parent="right-door"]
+position = Vector2( 0.0532149, 1.78814e-07 )
+scale = Vector2( 0.934491, 0.93 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 111.041, 95.4057, 17.0061, 16.4908 )
+
+[node name="right-collision" type="CollisionShape2D" parent="right-door"]
+position = Vector2( -0.0385551, -0.32 )
+scale = Vector2( 0.283814, 0.32 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 2.5, -17.5 )
+shape = SubResource( 5 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 4 )
+anims/door-open = SubResource( 3 )
+
+[connection signal="body_entered" from="." to="." method="_on_next_level_body_entered"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

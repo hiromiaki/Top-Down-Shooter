@@ -1,0 +1,55 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/fonts/Dungeon Quests.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/fonts/KGPerfectPenmanship.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/button/bar_round_gloss_large-gray.png" type="Texture" id=3]
+[ext_resource path="res://assets/button/panel_rectangle.png" type="Texture" id=4]
+[ext_resource path="res://assets/button/bar_shadow_round_outline_large.png" type="Texture" id=5]
+[ext_resource path="res://src/gameOver.gd" type="Script" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 50
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 23
+font_data = ExtResource( 2 )
+
+[node name="gameOver" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 6 )
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color( 0, 0, 0, 1 )
+margin_right = 1024.0
+margin_bottom = 768.0
+
+[node name="youDied-Label" type="Label" parent="."]
+margin_left = 362.0
+margin_top = 272.0
+margin_right = 640.0
+margin_bottom = 331.0
+custom_fonts/font = SubResource( 1 )
+text = "YOU DIED!"
+
+[node name="playAgain-button" type="TextureButton" parent="."]
+margin_left = 411.0
+margin_top = 385.0
+margin_right = 605.0
+margin_bottom = 451.0
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 5 )
+texture_hover = ExtResource( 4 )
+expand = true
+
+[node name="Label" type="Label" parent="playAgain-button"]
+margin_left = 22.0
+margin_top = 17.0
+margin_right = 178.0
+margin_bottom = 53.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "PLAY AGAIN"
+
+[connection signal="pressed" from="playAgain-button" to="." method="_on_playAgainbutton_pressed"]

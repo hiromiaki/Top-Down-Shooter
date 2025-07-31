@@ -1,0 +1,14 @@
+# Godot-generated folders
+.import/
+.export/
+*.import
+
+# Exported builds
+/bin/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Optional: Ignore editor settings
+# editor_settings-3.tres

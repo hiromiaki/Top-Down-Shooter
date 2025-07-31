@@ -1,0 +1,88 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://src/HUD.gd" type="Script" id=1]
+[ext_resource path="res://assets/UI/ValueBar_128x16.png" type="Texture" id=2]
+[ext_resource path="res://assets/UI/BlackBigCircleBoxWithBorder_27x27.png" type="Texture" id=3]
+[ext_resource path="res://assets/UI/HealthBarPanel_160x41.png" type="Texture" id=4]
+[ext_resource path="res://assets/UI/HeartIcons_32x32.png" type="Texture" id=5]
+[ext_resource path="res://assets/UI/CornerKnot_14x14.png" type="Texture" id=6]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.176471, 0.172549, 0.172549, 0 )
+expand_margin_left = 1.0
+expand_margin_right = 1.0
+expand_margin_top = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color( 0, 0, 0, 0.27451 )
+shadow_offset = Vector2( 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 1, 0.568627, 0, 1 )
+
+[sub_resource type="StyleBoxEmpty" id=4]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource( 1 )
+
+[node name="background" type="Node" parent="."]
+
+[node name="HealthBarPanel160X41" type="Sprite" parent="background"]
+position = Vector2( 225, 56 )
+scale = Vector2( 1.79688, 1.26524 )
+texture = ExtResource( 4 )
+
+[node name="ValueBar128X16" type="Sprite" parent="background"]
+position = Vector2( 232.5, 55 )
+scale = Vector2( 1.78906, 1.5 )
+texture = ExtResource( 2 )
+
+[node name="BlackBigCircleBoxWithBorder27X27" type="Sprite" parent="background"]
+position = Vector2( 71, 56 )
+scale = Vector2( 2.07317, 1.94512 )
+texture = ExtResource( 3 )
+
+[node name="HeartIcons32X32" type="Sprite" parent="background"]
+position = Vector2( 71, 58 )
+scale = Vector2( 2, 1.8125 )
+texture = ExtResource( 5 )
+
+[node name="CornerKnot14X14" type="Sprite" parent="background"]
+position = Vector2( 361, 37 )
+scale = Vector2( 1.58928, 1.42857 )
+texture = ExtResource( 6 )
+
+[node name="CornerKnot14X15" type="Sprite" parent="background"]
+position = Vector2( 361, 76 )
+scale = Vector2( 1.58928, 1.42857 )
+texture = ExtResource( 6 )
+
+[node name="damageBar" type="ProgressBar" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 124.0
+margin_top = 48.0
+margin_right = -684.0
+margin_bottom = -707.0
+custom_styles/fg = SubResource( 1 )
+custom_styles/bg = SubResource( 2 )
+value = 100.0
+percent_visible = false
+
+[node name="healthBar" type="ProgressBar" parent="."]
+margin_left = 124.0
+margin_top = 48.0
+margin_right = 340.0
+margin_bottom = 61.0
+custom_styles/fg = SubResource( 3 )
+custom_styles/bg = SubResource( 4 )
+value = 100.0
+percent_visible = false
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.4
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
