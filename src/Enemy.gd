@@ -1,11 +1,11 @@
 extends KinematicBody2D
 
+signal enemy_died  # This lets Main.gd know when this enemy dies
 
 export var speed := 100
 export var max_health := 3
 
-
-var current_health := max_health
+var current_health := 0
 var velocity = Vector2.ZERO
 var random_direction = Vector2.ZERO
 var is_hurt := false
@@ -15,6 +15,8 @@ onready var anim_player = $AnimationPlayer
 onready var coin_scene = preload("res://src/coin.tscn")
 
 func _ready():
+	current_health = max_health
+
 	if player == null or not is_instance_valid(player):
 		random_direction = Vector2(randf() * 2 - 1, randf() * 2 - 1).normalized()
 
@@ -22,7 +24,6 @@ func _physics_process(delta):
 	if current_health <= 0:
 		return  # Stop movement if dead
 
-	# Skip movement while hurt animation is playing (optional)
 	if is_hurt:
 		return
 
@@ -50,7 +51,6 @@ func take_damage(amount):
 	if anim_player.has_animation("hurt"):
 		anim_player.play("hurt")
 
-	# Optional: return to idle after hurt animation duration (matches your hurt animation length)
 	yield(get_tree().create_timer(0.3), "timeout")
 	is_hurt = false
 
@@ -59,10 +59,10 @@ func take_damage(amount):
 		die()
 
 func die():
+	emit_signal("enemy_died")  # Notify Main.gd
 	queue_free()
 
 func drop_coin():
 	var coin = coin_scene.instance()
-	get_tree().root.add_child(coin)
-	coin.position = global_position
-
+	get_parent().add_child(coin)
+	coin.global_position = global_position

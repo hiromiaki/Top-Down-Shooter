@@ -819,3 +819,4 @@ anims/RESET = SubResource( 164 )
 anims/reloading = SubResource( 165 )
 
 [connection signal="body_entered" from="HurtBox" to="." method="_on_HurtBox_body_entered"]
+[connection signal="body_exited" from="HurtBox" to="." method="_on_HurtBox_body_exited"]

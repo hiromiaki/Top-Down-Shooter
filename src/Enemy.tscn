@@ -151,10 +151,10 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=29]
-extents = Vector2( 6.5, 6 )
+extents = Vector2( 20, 16 )
 
 [sub_resource type="RectangleShape2D" id=30]
-extents = Vector2( 7.5, 7 )
+extents = Vector2( 24, 20 )
 
 [sub_resource type="Animation" id=31]
 length = 0.001
@@ -193,14 +193,14 @@ collision_mask = 15
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 5.96046e-08, -8 )
-scale = Vector2( 0.875, 0.921875 )
+position = Vector2( -9.53674e-07, -29 )
+scale = Vector2( 2.3418, 2.53516 )
 frames = SubResource( 28 )
 animation = "idle-front"
 frame = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -0.5, 0 )
+position = Vector2( 0, -5 )
 shape = SubResource( 29 )
 
 [node name="Bullet" type="Area2D" parent="."]
@@ -208,12 +208,12 @@ collision_layer = 2
 collision_mask = 13
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bullet"]
-position = Vector2( -0.5, 0 )
+position = Vector2( 0, -5 )
 shape = SubResource( 30 )
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
-position = Vector2( -0.5, 4.76837e-07 )
-scale = Vector2( 0.65, 0.6 )
+position = Vector2( 1, -5 )
+scale = Vector2( 1.4, 1.1 )
 process_parent = true
 physics_process_parent = true
 

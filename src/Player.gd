@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 signal healthChanged(new_health)
+signal player_died
 
 # === Player Stats ===
 export var maxHealth := 100
@@ -26,10 +27,13 @@ onready var coin_label = $"../CanvasLayer/coin_label"
 
 # === Gun Ammo ===
 export var max_ammo := 20
-var current_ammo := max_ammo
+var current_ammo := 20
 var is_reloading := false
 onready var bullet_label = $"../CanvasLayer/bulletLabel"
 onready var anim_player = $AnimationPlayer
+
+# === Power-Ups ===
+var has_triple_shot := false
 
 # === Camera Shake ===
 var shake_strength := 0.0
@@ -49,6 +53,7 @@ func _ready():
 	if health_ui.has_method("init_health"):
 		health_ui.call("init_health", maxHealth)
 	
+	update_coin_display()
 	update_bullet_label()
 
 func _physics_process(delta):
@@ -152,6 +157,10 @@ func update_bullet_label():
 	if is_instance_valid(bullet_label):
 		bullet_label.text = str(current_ammo) + " / " + str(max_ammo)
 
+func unlock_triple_shot():
+	has_triple_shot = true
+	coin_label.text = str(GameManager.coins)
+
 func aim_gun_at_mouse():
 	if is_dead or not is_instance_valid(gun):
 		return
@@ -164,11 +173,28 @@ func aim_gun_at_mouse():
 
 	gun.z_index = 10
 
+func restore_full_health():
+	currentHealth = maxHealth
+	emit_signal("healthChanged", currentHealth)
+	if health_ui.has_method("set_health"):
+		health_ui.call("set_health", currentHealth)
+	
+	coin_label.text = str(GameManager.coins)
+
 func add_coin(amount):
 	GameManager.add_coin(amount)
 	if coin_label:
 		coin_label.text = str(GameManager.coins)
 
+func upgrade_ammo_capacity(increment):
+	max_ammo = min(max_ammo + increment, 100)
+	current_ammo = max_ammo
+	coin_label.text = str(GameManager.coins)
+	update_bullet_label()
+
+func update_coin_display():
+	print("Updating Coin Display:", GameManager.coins)
+	coin_label.text = str(GameManager.coins)
 
 func heal(amount):
 	if is_dead:
@@ -183,16 +209,34 @@ func shoot():
 	if is_dead or is_reloading or current_ammo <= 0:
 		return
 
-	var bullet = bullet_scene.instance()
-	var spawn_position = gun.global_position
-	if gun.has_node("FirePoint"):
-		spawn_position = gun.get_node("FirePoint").global_position
+	if has_triple_shot:
+		for angle_offset in [-10, 0, 10]:
+			if current_ammo <= 0:
+				break
 
-	bullet.position = spawn_position
-	bullet.direction = (get_global_mouse_position() - spawn_position).normalized()
-	get_parent().add_child(bullet)
+			var bullet = bullet_scene.instance()
+			var spawn_position = gun.global_position
+			if gun.has_node("FirePoint"):
+				spawn_position = gun.get_node("FirePoint").global_position
 
-	current_ammo -= 1
+			bullet.position = spawn_position
+			var dir = (get_global_mouse_position() - spawn_position).normalized().rotated(deg2rad(angle_offset))
+			bullet.direction = dir
+			get_parent().add_child(bullet)
+
+			current_ammo -= 1
+	else:
+		var bullet = bullet_scene.instance()
+		var spawn_position = gun.global_position
+		if gun.has_node("FirePoint"):
+			spawn_position = gun.get_node("FirePoint").global_position
+
+		bullet.position = spawn_position
+		bullet.direction = (get_global_mouse_position() - spawn_position).normalized()
+		get_parent().add_child(bullet)
+
+		current_ammo -= 1
+
 	update_bullet_label()
 
 	# 💥 Trigger screen shake
@@ -222,6 +266,8 @@ func die():
 	velocity = Vector2.ZERO
 	animated_sprite.animation = "death"
 	animated_sprite.play()
+	
+	emit_signal("player_died")
 
 	if fade_anim and fade_anim.has_animation("fade_to_black"):
 		fade_anim.play("fade_to_black")

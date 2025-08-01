@@ -937,6 +937,14 @@ font_data = ExtResource( 12 )
 size = 20
 font_data = ExtResource( 12 )
 
+[sub_resource type="DynamicFont" id=70]
+size = 24
+font_data = ExtResource( 17 )
+
+[sub_resource type="DynamicFont" id=67]
+size = 30
+font_data = ExtResource( 17 )
+
 [sub_resource type="Animation" id=26]
 length = 0.001
 tracks/0/type = "value"
@@ -967,14 +975,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
 }
-
-[sub_resource type="DynamicFont" id=70]
-size = 24
-font_data = ExtResource( 17 )
-
-[sub_resource type="DynamicFont" id=67]
-size = 30
-font_data = ExtResource( 17 )
 
 [sub_resource type="Shader" id=68]
 code = "shader_type canvas_item;
@@ -1180,22 +1180,12 @@ limit_bottom = 800
 smoothing_enabled = true
 
 [node name="Enemy" parent="." instance=ExtResource( 4 )]
-position = Vector2( 736, 385 )
-scale = Vector2( 3, 3 )
+position = Vector2( 696, 403 )
 z_index = 1
 
 [node name="HUD" parent="." instance=ExtResource( 5 )]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="ScreenFade" type="ColorRect" parent="CanvasLayer"]
-margin_right = 1024.0
-margin_bottom = 785.0
-color = Color( 0, 0, 0, 0 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/ScreenFade"]
-anims/RESET = SubResource( 26 )
-anims/fade_to_black = SubResource( 27 )
 
 [node name="bullet_display" type="Sprite" parent="CanvasLayer"]
 position = Vector2( 132, 108 )
@@ -1228,7 +1218,17 @@ position = Vector2( 870, 55 )
 scale = Vector2( 3.30469, 2.67361 )
 texture = ExtResource( 16 )
 
+[node name="ScreenFade" type="ColorRect" parent="CanvasLayer"]
+margin_right = 1024.0
+margin_bottom = 785.0
+color = Color( 0, 0, 0, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/ScreenFade"]
+anims/RESET = SubResource( 26 )
+anims/fade_to_black = SubResource( 27 )
+
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
 material = SubResource( 69 )
 margin_right = 1024.0
 margin_bottom = 768.0
