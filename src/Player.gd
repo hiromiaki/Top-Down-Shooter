@@ -37,6 +37,13 @@ var has_triple_shot := false
 
 # === Camera Shake ===
 var shake_strength := 0.0
+var is_paused = false
+
+# === Sound Effects ===
+onready var gun_fire = $"gun-fire"
+onready var reload_gun = $"reload-gun"
+onready var hurt_sound = $"hurt-sound"
+
 
 # === Nodes ===
 onready var gun = $GunSprite
@@ -83,10 +90,15 @@ func start_reload():
 	else:
 		yield(get_tree().create_timer(1.5), "timeout")  # fallback if animation not found
 	
+	reload_gun.play()
 	current_ammo = max_ammo
 	is_reloading = false
 	update_bullet_label()
 
+func pause_player(pause: bool):
+	is_paused = pause
+	if is_paused:
+		velocity = Vector2.ZERO  # Stop movement when paused
 
 func _process(delta):
 	# Camera shake logic
@@ -152,8 +164,10 @@ func update_animation():
 			7:
 				animated_sprite.animation = "idle-backRight"
 		animated_sprite.play()
-
+	
 func update_bullet_label():
+	bullet_label.text = str(GameManager.coins)
+	
 	if is_instance_valid(bullet_label):
 		bullet_label.text = str(current_ammo) + " / " + str(max_ammo)
 
@@ -223,7 +237,7 @@ func shoot():
 			var dir = (get_global_mouse_position() - spawn_position).normalized().rotated(deg2rad(angle_offset))
 			bullet.direction = dir
 			get_parent().add_child(bullet)
-
+			gun_fire.play()
 			current_ammo -= 1
 	else:
 		var bullet = bullet_scene.instance()
@@ -269,18 +283,30 @@ func die():
 	
 	emit_signal("player_died")
 
+	# Play fade animation if available
 	if fade_anim and fade_anim.has_animation("fade_to_black"):
 		fade_anim.play("fade_to_black")
 
+	# Clean up the gun and hurtbox
 	if is_instance_valid(gun):
 		gun.queue_free()
 
 	if is_instance_valid(hurtbox):
 		hurtbox.set_deferred("disabled", true)
 
+	# Wait for death animation to finish
 	yield(animated_sprite, "animation_finished")
+
+	# Remove the player node
 	queue_free()
-	$"../CanvasLayer/gameOver".show()
+
+	# Show the Game Over screen and update stats
+	var gameover_ui = $"../CanvasLayer/gameOver"
+	gameover_ui.show()
+
+	if gameover_ui.has_method("show_stats"):
+		gameover_ui.call("show_stats")
+
 
 func start_dash():
 	is_dashing = true

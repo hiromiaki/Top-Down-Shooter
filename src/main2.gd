@@ -8,6 +8,13 @@ onready var player = $Player
 onready var countdown_timer = $CountdownTimer
 onready var countdown_label = $CanvasLayer/CountdownLabel
 onready var potion_timer = $PotionTimer
+onready var wave_label = $CanvasLayer/WaveLabel  # Reference to wave label in CanvasLayer
+onready var start_menu = $"start-menu"  # Reference to the start menu
+onready var hud = $HUD
+onready var Labels = $CanvasLayer
+onready var bg_music = $"bg-music"
+onready var score_label = $CanvasLayer/score_label
+
 
 export(PackedScene) var EnemyScene
 export(PackedScene) var PotionScene
@@ -20,25 +27,58 @@ var enemies_per_wave = 3
 var alive_enemies = 0
 var countdown_time = 3
 var is_game_over = false
+var is_game_started = false  # To track if the game has started
 
 func _ready():
 	randomize()
 	shop_area.connect("shop_opened", self, "_on_shop_opened")
 	countdown_timer.connect("timeout", self, "_on_countdown_tick")
-	potion_timer.connect("timeout", self, "_on_potion_timer_timeout")
-
 
 	# Connect the player death signal
 	if player.has_signal("player_died"):
 		player.connect("player_died", self, "_on_player_died")
 
+	# Show the start menu and start countdown for the game
+	show_start_menu()
+	bg_music.play()
+	# Update the wave UI on startup
+	update_wave_ui()
+	
+# Show the start menu and stop all actions
+func show_start_menu():
+	hud.visible = false
+	Labels.visible = false
+	start_menu.show()  # Show the start menu
+	set_process(false)  # Disable processing of this script (pause all actions)
+
+# Hide the start menu and resume actions
+func hide_start_menu():
+	start_menu.hide()  # Hide the start menu
+	hud.visible = true  # Show HUD
+	Labels.visible = true  # Show Labels
+	player.visible = true  # Resume player movement
+	set_process(true)  # Enable processing of this script (resume actions)
+
+# Called when the Start button is pressed
+func _on_start_button_pressed():
+	hide_start_menu()  # Hide the start menu when the start button is pressed
+	is_game_started = true  # Mark that the game has started
+	start_game()  # Call to start the game logic (wave, countdown, etc.)
+
+# Start the actual game (transition to Main2)
+func start_game():
+	# Initialize the game (e.g., spawn enemies, start countdown)
 	start_countdown()
+
+# Update wave UI
+func update_wave_ui():
+	if is_instance_valid(wave_label):
+		wave_label.text = str(current_wave)
 
 func is_area_occupied(position: Vector2, enemy_node: Node2D) -> bool:
 	var space_state = get_world_2d().direct_space_state
 	var result = space_state.intersect_point(position, 1, [enemy_node], 0xFFFFFFFF, true, true)
 	return result.size() > 0
-
 
 func _process(delta):
 	color_rect.material.set_shader_param("time", OS.get_ticks_msec() / 1000.0)
@@ -55,8 +95,7 @@ func _on_shop_opened():
 func _on_potion_timer_timeout():
 	if is_game_over:
 		return
-	
-	# If a potion still exists, skip this spawn
+
 	if is_instance_valid(active_potion):
 		return
 
@@ -72,7 +111,6 @@ func _on_potion_timer_timeout():
 
 	active_potion = potion
 
-	# When potion is picked up or freed, clear reference
 	if potion.has_signal("tree_exited"):
 		potion.connect("tree_exited", self, "_on_potion_disappeared")
 
@@ -98,7 +136,6 @@ func spawn_enemies_staggered(spawn_points):
 		var enemy = EnemyScene.instance()
 		add_child(enemy)
 
-		# Try up to 10 times to find a non-colliding spawn point
 		var spawn_point = null
 		for attempt in range(10):
 			var candidate = spawn_points[randi() % spawn_points.size()]
@@ -112,16 +149,13 @@ func spawn_enemies_staggered(spawn_points):
 
 		enemy.position = spawn_point.global_position
 
-
 		if enemy.has_method("set_stats_for_wave"):
 			enemy.set_stats_for_wave(current_wave)
 
 		alive_enemies += 1
 		enemy.connect("enemy_died", self, "_on_enemy_died")
 
-		# Delay before spawning next enemy
 		yield(get_tree().create_timer(0.1), "timeout")
-
 
 func _on_enemy_died():
 	if is_game_over:
@@ -131,6 +165,8 @@ func _on_enemy_died():
 	if alive_enemies <= 0:
 		current_wave += 1
 		enemies_per_wave += 2
+		update_wave_ui()
+		GameManager.increment_wave()  # Update the wave count in GameManager
 		start_countdown()
 
 func start_countdown():
@@ -160,4 +196,3 @@ func _on_player_died():
 	is_game_over = true
 	countdown_timer.stop()
 	countdown_label.hide()
-	game_over.show()

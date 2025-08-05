@@ -1,31 +1,72 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/gameplay/tileset/Dungeon_Tileset.png" type="Texture" id=1]
 [ext_resource path="res://src/ShopArea.gd" type="Script" id=2]
+[ext_resource path="res://assets/fonts/KGPerfectPenmanship.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 15.5, 13 )
+extents = Vector2( 33, 20 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 19
+font_data = ExtResource( 3 )
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -0.500008, -10.7656 ) ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "idle"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.7 ),
+"transitions": PoolRealArray( 1.62451, 1 ),
+"update": 0,
+"values": [ Vector2( -0.500008, -10.7656 ), Vector2( -0.500008, -15.7656 ) ]
+}
 
 [node name="ShopArea" type="Area2D"]
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 1.19209e-07, -7.45058e-09 )
-scale = Vector2( 2.15625, 2.16346 )
+position = Vector2( -0.500008, -10.7656 )
+scale = Vector2( 4.75, 3.42132 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 63.7235, 129.217, 16.1851, 13.725 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0.5, 0 )
+position = Vector2( 1, -15 )
 shape = SubResource( 1 )
 
 [node name="Label" type="Label" parent="."]
-margin_left = -58.0
-margin_top = 14.0
-margin_right = 76.0
-margin_bottom = 28.0
+margin_left = -88.0
+margin_top = 17.0
+margin_right = 98.0
+margin_bottom = 45.0
+custom_fonts/font = SubResource( 2 )
 text = "press x to open shop"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 3 )
+anims/idle = SubResource( 4 )
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

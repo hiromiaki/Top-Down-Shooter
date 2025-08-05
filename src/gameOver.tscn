@@ -1,19 +1,37 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://assets/fonts/Dungeon Quests.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://assets/fonts/KGPerfectPenmanship.ttf" type="DynamicFontData" id=2]
-[ext_resource path="res://assets/button/bar_round_gloss_large-gray.png" type="Texture" id=3]
+[ext_resource path="res://assets/UI/CornerKnot_14x14.png" type="Texture" id=2]
+[ext_resource path="res://assets/UI/Button_52x14.png" type="Texture" id=3]
 [ext_resource path="res://assets/button/panel_rectangle.png" type="Texture" id=4]
 [ext_resource path="res://assets/button/bar_shadow_round_outline_large.png" type="Texture" id=5]
 [ext_resource path="res://src/gameOver.gd" type="Script" id=6]
+[ext_resource path="res://assets/UI/RectangleBox_96x96.png" type="Texture" id=7]
+[ext_resource path="res://assets/fonts/The Lost Dungeon.ttf" type="DynamicFontData" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 50
 font_data = ExtResource( 1 )
 
+[sub_resource type="DynamicFont" id=3]
+size = 30
+font_data = ExtResource( 8 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 30
+font_data = ExtResource( 8 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 30
+font_data = ExtResource( 8 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 30
+font_data = ExtResource( 8 )
+
 [sub_resource type="DynamicFont" id=2]
 size = 23
-font_data = ExtResource( 2 )
+font_data = ExtResource( 1 )
 
 [node name="gameOver" type="Control"]
 anchor_right = 1.0
@@ -25,31 +43,114 @@ modulate = Color( 0, 0, 0, 1 )
 margin_right = 1024.0
 margin_bottom = 768.0
 
+[node name="RectangleBox96X96" type="Sprite" parent="."]
+position = Vector2( 504.719, 391.063 )
+scale = Vector2( 4.36003, 4.16536 )
+texture = ExtResource( 7 )
+
 [node name="youDied-Label" type="Label" parent="."]
-margin_left = 362.0
-margin_top = 272.0
-margin_right = 640.0
-margin_bottom = 331.0
+margin_left = 364.0
+margin_top = 96.0
+margin_right = 642.0
+margin_bottom = 155.0
+custom_colors/font_color = Color( 1, 0.00784314, 0.00784314, 1 )
 custom_fonts/font = SubResource( 1 )
 text = "YOU DIED!"
 
+[node name="Game-stats" type="Label" parent="."]
+margin_left = 408.0
+margin_top = 233.0
+margin_right = 602.0
+margin_bottom = 273.0
+custom_fonts/font = SubResource( 3 )
+text = "Game Stats"
+align = 1
+
+[node name="total-score" type="Label" parent="."]
+margin_left = 556.0
+margin_top = 296.0
+margin_right = 651.0
+margin_bottom = 336.0
+custom_fonts/font = SubResource( 4 )
+text = "0"
+
+[node name="total-score2" type="Label" parent="."]
+margin_left = 390.0
+margin_top = 296.0
+margin_right = 531.0
+margin_bottom = 336.0
+custom_fonts/font = SubResource( 4 )
+text = "Total Score:"
+
+[node name="total-wave" type="Label" parent="."]
+margin_left = 556.0
+margin_top = 346.0
+margin_right = 655.0
+margin_bottom = 386.0
+custom_fonts/font = SubResource( 5 )
+text = "0"
+
+[node name="total-wave2" type="Label" parent="."]
+margin_left = 390.0
+margin_top = 346.0
+margin_right = 530.0
+margin_bottom = 386.0
+custom_fonts/font = SubResource( 5 )
+text = "Total Wave:"
+
+[node name="enemy-kill" type="Label" parent="."]
+margin_left = 556.0
+margin_top = 396.0
+margin_right = 666.0
+margin_bottom = 436.0
+custom_fonts/font = SubResource( 6 )
+text = "0"
+
+[node name="enemy-kill2" type="Label" parent="."]
+margin_left = 390.0
+margin_top = 396.0
+margin_right = 542.0
+margin_bottom = 436.0
+custom_fonts/font = SubResource( 6 )
+text = "enemies kill:"
+
 [node name="playAgain-button" type="TextureButton" parent="."]
-margin_left = 411.0
-margin_top = 385.0
-margin_right = 605.0
-margin_bottom = 451.0
+margin_left = 408.0
+margin_top = 472.0
+margin_right = 602.0
+margin_bottom = 538.0
 texture_normal = ExtResource( 3 )
 texture_pressed = ExtResource( 5 )
 texture_hover = ExtResource( 4 )
 expand = true
 
 [node name="Label" type="Label" parent="playAgain-button"]
-margin_left = 22.0
-margin_top = 17.0
-margin_right = 178.0
-margin_bottom = 53.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
+margin_left = 18.0
+margin_top = 16.0
+margin_right = 175.0
+margin_bottom = 52.0
+custom_colors/font_color = Color( 1, 0.0156863, 0.0156863, 1 )
 custom_fonts/font = SubResource( 2 )
 text = "PLAY AGAIN"
+
+[node name="CornerKnot14X14" type="Sprite" parent="."]
+position = Vector2( 316.25, 576.75 )
+scale = Vector2( 5.10714, 5.32142 )
+texture = ExtResource( 2 )
+
+[node name="CornerKnot14X17" type="Sprite" parent="."]
+position = Vector2( 313, 210 )
+scale = Vector2( 5.10714, 5.32142 )
+texture = ExtResource( 2 )
+
+[node name="CornerKnot14X15" type="Sprite" parent="."]
+position = Vector2( 693, 579 )
+scale = Vector2( 5.10714, 5.32142 )
+texture = ExtResource( 2 )
+
+[node name="CornerKnot14X16" type="Sprite" parent="."]
+position = Vector2( 697, 209 )
+scale = Vector2( 5.10714, 5.32142 )
+texture = ExtResource( 2 )
 
 [connection signal="pressed" from="playAgain-button" to="." method="_on_playAgainbutton_pressed"]

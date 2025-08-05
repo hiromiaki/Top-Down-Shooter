@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-signal enemy_died  # This lets Main.gd know when this enemy dies
+signal enemy_died  # Signal emitted when enemy dies
 
 export var speed := 100
 export var max_health := 3
@@ -13,6 +13,8 @@ var is_hurt := false
 onready var player = get_tree().get_root().find_node("Player", true, false)
 onready var anim_player = $AnimationPlayer
 onready var coin_scene = preload("res://src/coin.tscn")
+onready var point_label_scene = preload("res://src/PointLabel.tscn")
+onready var game_manager = get_node("/root/GameManager")
 
 func _ready():
 	current_health = max_health
@@ -56,13 +58,21 @@ func take_damage(amount):
 
 	if current_health <= 0:
 		drop_coin()
+		award_points()
+		emit_signal("enemy_died")
 		die()
 
 func die():
-	emit_signal("enemy_died")  # Notify Main.gd
+	GameManager.add_enemy_kill() 
 	queue_free()
 
 func drop_coin():
 	var coin = coin_scene.instance()
 	get_parent().add_child(coin)
 	coin.global_position = global_position
+
+func award_points():
+	var score = randi() % 50 + 1  # Random points: 1–100
+	GameManager.add_score(score)
+
+	

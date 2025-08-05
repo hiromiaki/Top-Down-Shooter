@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://assets/UI/CornerKnot_14x14.png" type="Texture" id=1]
 [ext_resource path="res://assets/UI/TopPatternPanel_01_33x15.png" type="Texture" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://assets/UI/ItemBox_24x24.png" type="Texture" id=8]
 [ext_resource path="res://assets/UI/Button_52x14.png" type="Texture" id=9]
 [ext_resource path="res://src/Shop.gd" type="Script" id=10]
+[ext_resource path="res://assets/UI/abilities.png" type="Texture" id=11]
 
 [sub_resource type="DynamicFont" id=1]
 size = 11
@@ -112,7 +113,7 @@ margin_right = 427.0
 margin_bottom = 413.0
 custom_fonts/font = SubResource( 1 )
 text = "Triple Shot
-10 coins"
+50 coins"
 align = 1
 
 [node name="tripleShotButton" type="TextureButton" parent="."]
@@ -130,6 +131,13 @@ margin_right = 61.0
 margin_bottom = 28.0
 custom_fonts/font = SubResource( 2 )
 text = "BUY"
+
+[node name="tripleShot" type="Sprite" parent="."]
+position = Vector2( 397, 331 )
+scale = Vector2( 0.136301, 0.0993594 )
+texture = ExtResource( 11 )
+region_enabled = true
+region_rect = Rect2( -9.58676, 114.676, 366.522, 509.322 )
 
 [node name="addAmmo" type="Sprite" parent="."]
 position = Vector2( 511, 330 )
@@ -162,6 +170,13 @@ margin_bottom = 28.0
 custom_fonts/font = SubResource( 4 )
 text = "BUY"
 
+[node name="addAmmo2" type="Sprite" parent="."]
+position = Vector2( 511, 330 )
+scale = Vector2( 0.117697, 0.118011 )
+texture = ExtResource( 11 )
+region_enabled = true
+region_rect = Rect2( 472.561, 139.773, 445.863, 465.248 )
+
 [node name="fullHealth" type="Sprite" parent="."]
 position = Vector2( 620, 330 )
 scale = Vector2( 3.198, 2.83333 )
@@ -192,6 +207,13 @@ margin_right = 62.0
 margin_bottom = 28.0
 custom_fonts/font = SubResource( 4 )
 text = "BUY"
+
+[node name="fullHealth2" type="Sprite" parent="."]
+position = Vector2( 620, 330 )
+scale = Vector2( 0.131028, 0.11763 )
+texture = ExtResource( 11 )
+region_enabled = true
+region_rect = Rect2( 1047.58, 171.628, 394.509, 424.437 )
 
 [node name="Label" type="Label" parent="."]
 margin_left = 468.0

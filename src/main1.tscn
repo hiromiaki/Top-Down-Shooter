@@ -1,9 +1,9 @@
-[gd_scene load_steps=78 format=2]
+[gd_scene load_steps=81 format=2]
 
 [ext_resource path="res://src/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/gameplay/tileset/Dungeon_Tileset.png" type="Texture" id=2]
 [ext_resource path="res://src/main1.gd" type="Script" id=3]
-[ext_resource path="res://src/Enemy.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/UI/Button_52x14.png" type="Texture" id=4]
 [ext_resource path="res://src/HUD.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/gameplay/W.png" type="Texture" id=6]
 [ext_resource path="res://assets/gameplay/A.png" type="Texture" id=7]
@@ -13,6 +13,7 @@
 [ext_resource path="res://assets/gameplay/LMB.png" type="Texture" id=11]
 [ext_resource path="res://assets/fonts/KGPerfectPenmanship.ttf" type="DynamicFontData" id=12]
 [ext_resource path="res://src/next_level.tscn" type="PackedScene" id=13]
+[ext_resource path="res://src/Enemy.tscn" type="PackedScene" id=14]
 [ext_resource path="res://src/AnimatedCursor.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/UI/CoinIcon(WithoutStroke)_16x18.png" type="Texture" id=16]
 [ext_resource path="res://assets/fonts/Dungeon Quests.ttf" type="DynamicFontData" id=17]
@@ -1031,6 +1032,14 @@ shader_param/scanline_strength = 0.05
 shader_param/vignette_strength = 0.3
 shader_param/noise_strength = 0.02
 
+[sub_resource type="DynamicFont" id=71]
+size = 70
+font_data = ExtResource( 17 )
+
+[sub_resource type="DynamicFont" id=72]
+size = 19
+font_data = ExtResource( 12 )
+
 [node name="main1" type="Node2D"]
 script = ExtResource( 3 )
 
@@ -1082,6 +1091,7 @@ text = "movement "
 
 [node name="Lmb" type="Sprite" parent="labels"]
 position = Vector2( 174, 300 )
+rotation = -0.00133093
 scale = Vector2( 0.156537, 0.155556 )
 texture = ExtResource( 11 )
 
@@ -1167,6 +1177,7 @@ custom_fonts/font = SubResource( 66 )
 text = "------> "
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
+pause_mode = 2
 position = Vector2( 377, 686 )
 z_index = 1
 
@@ -1179,13 +1190,11 @@ limit_right = 900
 limit_bottom = 800
 smoothing_enabled = true
 
-[node name="Enemy" parent="." instance=ExtResource( 4 )]
-position = Vector2( 696, 403 )
-z_index = 1
-
 [node name="HUD" parent="." instance=ExtResource( 5 )]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="AnimatedCursor" parent="CanvasLayer" instance=ExtResource( 15 )]
 
 [node name="bullet_display" type="Sprite" parent="CanvasLayer"]
 position = Vector2( 132, 108 )
@@ -1210,8 +1219,6 @@ margin_bottom = 76.0
 custom_fonts/font = SubResource( 67 )
 text = "0"
 autowrap = true
-
-[node name="AnimatedCursor" parent="CanvasLayer" instance=ExtResource( 15 )]
 
 [node name="CoinIcon(WithoutStroke)16X18" type="Sprite" parent="CanvasLayer"]
 position = Vector2( 870, 55 )
@@ -1245,3 +1252,39 @@ position = Vector2( 475, 538 )
 [node name="next_level" parent="." instance=ExtResource( 13 )]
 position = Vector2( 669, 515 )
 collision_mask = 3
+
+[node name="start-menu" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="start-menu"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -431.0
+margin_top = -263.0
+margin_right = 47.0
+margin_bottom = -95.0
+custom_fonts/font = SubResource( 71 )
+text = "DUNGEON SURVIVAL"
+autowrap = true
+
+[node name="start_button" type="TextureButton" parent="start-menu"]
+margin_left = 620.0
+margin_top = 606.0
+margin_right = 785.0
+margin_bottom = 650.0
+texture_normal = ExtResource( 4 )
+expand = true
+
+[node name="Label" type="Label" parent="start-menu/start_button"]
+margin_left = 48.0
+margin_top = 9.0
+margin_right = 109.0
+margin_bottom = 37.0
+custom_fonts/font = SubResource( 72 )
+text = "START"
+
+[node name="Enemy" parent="." instance=ExtResource( 14 )]
+position = Vector2( 427, 408 )
+
+[connection signal="pressed" from="start-menu/start_button" to="." method="_on_start_button_pressed"]

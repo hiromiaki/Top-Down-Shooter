@@ -5,7 +5,7 @@ onready var triple_shot_button = $tripleShotButton
 onready var add_ammo_button = $addAmmoButton
 onready var error_purchase_label = $ErrorPurchase
 
-export var triple_shot_cost := 10
+export var triple_shot_cost := 50
 export var add_ammo_cost := 10
 export var full_heal_cost := 10
 
