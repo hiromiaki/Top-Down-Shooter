@@ -162,6 +162,7 @@ func _on_enemy_died():
 		return
 
 	alive_enemies -= 1
+	score_label.text = str(GameManager.score)
 	if alive_enemies <= 0:
 		current_wave += 1
 		enemies_per_wave += 2
